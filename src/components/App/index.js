@@ -22,14 +22,20 @@ const App = () => (
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
     <FirebaseContext.Consumer>
       {firebase => (
-        <Route
-          exact
-          path={ROUTES.SIGN_UP}
-          render={props => <SignUpPage firebase={firebase} {...props} />}
-        />
+        <React.Fragment>
+          <Route
+            exact
+            path={ROUTES.SIGN_UP}
+            render={props => <SignUpPage firebase={firebase} {...props} />}
+          />
+          <Route
+            exact
+            path={ROUTES.SIGN_IN}
+            render={props => <SignInPage firebase={firebase} {...props} />}
+          />
+        </React.Fragment>
       )}
     </FirebaseContext.Consumer>
-    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
     <Route exact path={ROUTES.HOME} component={HomePage} />
     <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
