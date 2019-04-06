@@ -16,28 +16,13 @@ import * as ROUTES from '../../constants/routes';
 
 const App = () => (
   <Router>
-    <FirebaseContext.Consumer>
-      {firebase => <Navigation firebase={firebase} />}
-    </FirebaseContext.Consumer>
-    <br />
+    <Navigation />
+
+    <hr />
 
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
-    <FirebaseContext.Consumer>
-      {firebase => (
-        <React.Fragment>
-          <Route
-            exact
-            path={ROUTES.SIGN_UP}
-            render={props => <SignUpPage firebase={firebase} {...props} />}
-          />
-          <Route
-            exact
-            path={ROUTES.SIGN_IN}
-            render={props => <SignInPage firebase={firebase} {...props} />}
-          />
-        </React.Fragment>
-      )}
-    </FirebaseContext.Consumer>
+    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
     <Route exact path={ROUTES.HOME} component={HomePage} />
     <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
