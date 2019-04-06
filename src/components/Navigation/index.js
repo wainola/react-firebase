@@ -4,10 +4,15 @@ import { Link } from 'react-router-dom';
 import SignOut from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
-const Navigation = ({ authUser }) => {
-  console.log('props navigation', authUser);
-  return <React.Fragment>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</React.Fragment>;
-};
+import { AuthUserContext } from '../Session';
+
+const Navigation = () => (
+  <React.Fragment>
+    <AuthUserContext.Consumer>
+      {authUser => (authUser ? <NavigationAuth /> : <NavigationNonAuth />)}
+    </AuthUserContext.Consumer>
+  </React.Fragment>
+);
 
 const NavigationAuth = () => (
   <ul>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Navigation from '../Navigation';
@@ -11,45 +11,24 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 
 import { withFirebase } from '../Firebase';
+import { withAuthentication } from '../Session';
 
 import * as ROUTES from '../../constants/routes';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      authUser: null
-    };
-  }
+const App = () => (
+  <Router>
+    <Navigation />
 
-  componentDidMount() {
-    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-      console.log('authUser::::', authUser);
-      authUser ? this.setState({ authUser }) : this.setState({ authUser: null });
-    });
-  }
+    <hr />
 
-  componentWillUnmount() {
-    this.listener();
-  }
+    <Route exact path={ROUTES.LANDING} component={LandingPage} />
+    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+    <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+    <Route exact path={ROUTES.HOME} component={HomePage} />
+    <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+    <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+  </Router>
+);
 
-  render() {
-    return (
-      <Router>
-        <Navigation authUser={this.state.authUser} />
-
-        <hr />
-
-        <Route exact path={ROUTES.LANDING} component={LandingPage} />
-        <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-        <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
-        <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-        <Route exact path={ROUTES.HOME} component={HomePage} />
-        <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
-        <Route exact path={ROUTES.ADMIN} component={AdminPage} />
-      </Router>
-    );
-  }
-}
-
-export default withFirebase(App);
+export default withAuthentication(App);
