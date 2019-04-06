@@ -10,6 +10,8 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 
+import { withFirebase } from '../Firebase';
+
 import * as ROUTES from '../../constants/routes';
 
 class App extends Component {
@@ -18,6 +20,17 @@ class App extends Component {
     this.state = {
       authUser: null
     };
+  }
+
+  componentDidMount() {
+    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+      console.log('authUser::::', authUser);
+      authUser ? this.setState({ authUser }) : this.setState({ authUser: null });
+    });
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
 
   render() {
@@ -39,4 +52,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withFirebase(App);

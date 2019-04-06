@@ -16,8 +16,7 @@ class SignUp extends Component {
         passwordOne: '',
         passwordTwo: '',
         error: null
-      },
-      isInvalid: undefined
+      }
     };
   }
 
@@ -31,8 +30,22 @@ class SignUp extends Component {
   // console.log('state', state);
 
   handleSubmit(evt) {
-    console.log('handleSubmit', isInvalid, this.state);
+    console.log('handleSubmit', this.state);
     evt.preventDefault();
+
+    const { username, email, passwordOne } = this.state;
+
+    this.props.firebase
+      .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(authUser => {
+        this.setState({ ...this.state });
+        this.props.history.push(ROUTES.HOME);
+      })
+      .catch(error => this.setState({ error }));
+  }
+
+  render() {
+    console.log('sigin render', this.props);
 
     const isInvalid =
       this.state.passwordOne !== this.state.passwordTwo ||
@@ -40,31 +53,11 @@ class SignUp extends Component {
       this.state.email === '' ||
       this.state.username === '';
 
-    if (!isInvalid) {
-      console.log('isvalid');
-      const { username, email, passwordOne } = this.state;
-
-      this.props.firebase
-        .doCreateUserWithEmailAndPassword(email, passwordOne)
-        .then(authUser => {
-          this.setState({ ...this.state });
-          this.props.history.push(ROUTES.HOME);
-        })
-        .catch(error => this.setState({ error }));
-    } else {
-      this.setState({
-        isInvalid
-      });
-    }
-  }
-
-  render() {
-    console.log('sigin render', this.props);
     return (
       <SignUpForm
         handleSubmit={this.handleSubmit}
         handleChange={this.handleChange}
-        isInvalid={this.isInvalid}
+        isInvalid={isInvalid}
       />
     );
   }

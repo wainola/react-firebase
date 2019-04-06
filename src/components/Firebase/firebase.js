@@ -35,6 +35,7 @@ class Firebase {
   }
 
   doSignOut() {
+    console.log('doSignOut');
     return this.auth.signOut();
   }
 

@@ -5,7 +5,7 @@ import SignOut from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
 const Navigation = ({ authUser }) => {
-  console.log('props');
+  console.log('props navigation', authUser);
   return <React.Fragment>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</React.Fragment>;
 };
 
