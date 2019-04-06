@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Navigation from '../Navigation';
@@ -10,24 +10,33 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 
-import { FirebaseContext } from '../Firebase';
-
 import * as ROUTES from '../../constants/routes';
 
-const App = () => (
-  <Router>
-    <Navigation />
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authUser: null
+    };
+  }
 
-    <hr />
+  render() {
+    return (
+      <Router>
+        <Navigation authUser={this.state.authUser} />
 
-    <Route exact path={ROUTES.LANDING} component={LandingPage} />
-    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-    <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
-    <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-    <Route exact path={ROUTES.HOME} component={HomePage} />
-    <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
-    <Route exact path={ROUTES.ADMIN} component={AdminPage} />
-  </Router>
-);
+        <hr />
+
+        <Route exact path={ROUTES.LANDING} component={LandingPage} />
+        <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+        <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+        <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+        <Route exact path={ROUTES.HOME} component={HomePage} />
+        <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+        <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+      </Router>
+    );
+  }
+}
 
 export default App;
