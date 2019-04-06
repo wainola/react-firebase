@@ -57,6 +57,7 @@ class Firebase {
   }
 
   users() {
+    console.log('users!!!');
     return this.db.ref('users');
   }
 }
