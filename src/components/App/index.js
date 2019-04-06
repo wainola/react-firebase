@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRoute as Router } from 'react-router-dom';
+
+import Navigation from '../Navigation';
 
 const App = () => (
-    <React.Fragment>
-        <h1>App</h1>
-    </React.Fragment>
-)
+  <Router>
+    <Navigation />
+  </Router>
+);
 
 export default App;
