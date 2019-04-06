@@ -4,32 +4,37 @@ import { Link } from 'react-router-dom';
 import SignOut from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
-const Navigation = props => {
+const Navigation = ({ authUser }) => {
   console.log('props');
-  return (
-    <React.Fragment>
-      <ul>
-        <li>
-          <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.LANDING}>Landing</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.HOME}>Home</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.ACCOUNT}>Account</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.ADMIN}>Admin</Link>
-        </li>
-        <li>
-          <SignOut firebase={props.firebase} />
-        </li>
-      </ul>
-    </React.Fragment>
-  );
+  return <React.Fragment>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</React.Fragment>;
 };
+
+const NavigationAuth = () => (
+  <ul>
+    <li>
+      <Link to={ROUTES.LANDING}>Landing</Link>
+    </li>
+    <li>
+      <Link to={ROUTES.HOME}>Home</Link>
+    </li>
+    <li>
+      <Link to={ROUTES.ACCOUNT}>Account</Link>
+    </li>
+    <li>
+      <SignOut />
+    </li>
+  </ul>
+);
+
+const NavigationNonAuth = () => (
+  <ul>
+    <li>
+      <Link to={ROUTES.LANDING}>Landing</Link>
+    </li>
+    <li>
+      <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+    </li>
+  </ul>
+);
 
 export default Navigation;
