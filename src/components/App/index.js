@@ -16,7 +16,9 @@ import * as ROUTES from '../../constants/routes';
 
 const App = () => (
   <Router>
-    <Navigation />
+    <FirebaseContext.Consumer>
+      {firebase => <Navigation firebase={firebase} />}
+    </FirebaseContext.Consumer>
     <br />
 
     <Route exact path={ROUTES.LANDING} component={LandingPage} />

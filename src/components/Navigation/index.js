@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import SignOut from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
-const Navigation = () => (
+const Navigation = props => (
   <React.Fragment>
     <ul>
       <li>
@@ -20,6 +21,9 @@ const Navigation = () => (
       </li>
       <li>
         <Link to={ROUTES.ADMIN}>Admin</Link>
+      </li>
+      <li>
+        <SignOut firebase={props.firebase} />
       </li>
     </ul>
   </React.Fragment>
