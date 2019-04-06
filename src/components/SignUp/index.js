@@ -37,7 +37,10 @@ const SignUp = props => {
 
       props.firebase
         .doCreateUserWithEmailAndPassword(email, passwordOne)
-        .then(authUser => setState({ ...state }))
+        .then(authUser => {
+          setState({ ...state });
+          props.history.push(ROUTES.HOME);
+        })
         .catch(error => setState({ error }));
     }
   }
