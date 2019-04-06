@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 
 import * as ROUTES from '../../constants/routes';
@@ -32,7 +32,7 @@ class Sigin extends Component {
   handleSubmit(evt) {
     evt.preventDefault();
 
-    const { email, password } = this.state;
+    const { email, password } = this.state.user;
     let { isInvalid } = this.state;
 
     isInvalid = password === '' || email === '';
@@ -40,7 +40,8 @@ class Sigin extends Component {
     if (!isInvalid) {
       this.props.firebase
         .doSignInWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(data => {
+          console.log('data::::', data);
           this.setState({
             user: { email: '', password: '', error: null }
           });

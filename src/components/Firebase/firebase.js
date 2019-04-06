@@ -23,10 +23,11 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
+    // CAUSE JS AND I DON'T KNOW WHY A LOOSE THE REFERENCE TO THIS
+    this.doSignOut = this.doSignOut.bind(this);
   }
 
   doCreateUserWithEmailAndPassword(email, password) {
-    console.log('create user!!');
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
 
@@ -35,8 +36,7 @@ class Firebase {
   }
 
   doSignOut() {
-    console.log('doSignOut');
-    return this.auth.signOut();
+    return this.auth.signOut().then(d => console.log('signout', d));
   }
 
   doPasswordReset(email) {
