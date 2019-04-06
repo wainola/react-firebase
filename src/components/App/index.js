@@ -10,6 +10,8 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 
+import { FirebaseContext } from '../Firebase';
+
 import * as ROUTES from '../../constants/routes';
 
 const App = () => (
@@ -18,7 +20,11 @@ const App = () => (
     <br />
 
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
-    <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+    <Route exact path={ROUTES.SIGN_UP}>
+      <FirebaseContext.Consumer>
+        {firebase => <SignUpPage firebase={firebase} />}
+      </FirebaseContext.Consumer>
+    </Route>
     <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
     <Route exact path={ROUTES.HOME} component={HomePage} />
