@@ -1,55 +1,70 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 
 import * as ROUTES from '../../constants/routes';
 
-const SignUp = props => {
-  console.log('props', props);
-  const [state, setState] = useState({
-    username: '',
-    email: '',
-    passwordOne: '',
-    passwordTwo: '',
-    error: null
-  });
+class SignUp extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      user: {
+        username: '',
+        email: '',
+        passwordOne: '',
+        passwordTwo: '',
+        error: null
+      }
+    };
+  }
 
-  const isInvalid =
-    state.passwordOne !== state.passwordTwo ||
-    state.passwordOne === '' ||
-    state.email === '' ||
-    state.username === '';
-
-  function handleChange(evt) {
-    setState({
-      ...state,
+  handleChange(evt) {
+    this.setState({
+      ...this.state,
       [evt.target.name]: evt.target.value
     });
   }
 
   // console.log('state', state);
 
-  function handleSubmit(evt) {
-    console.log('handleSubmit', isInvalid, state);
+  handleSubmit(evt) {
+    console.log('handleSubmit', this.state);
     evt.preventDefault();
-    if (!isInvalid) {
-      console.log('isvalid');
-      const { username, email, passwordOne } = state;
 
-      props.firebase
-        .doCreateUserWithEmailAndPassword(email, passwordOne)
-        .then(authUser => {
-          setState({ ...state });
-          props.history.push(ROUTES.HOME);
-        })
-        .catch(error => setState({ error }));
-    }
+    const { username, email, passwordOne } = this.state;
+
+    this.props.firebase
+      .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(authUser => {
+        return this.props.firebase.user(authUser.user.uid).set({ username, email });
+      })
+      .then(() => {
+        this.setState({ ...this.state });
+        this.props.history.push(ROUTES.HOME);
+      })
+      .catch(error => this.setState({ error }));
   }
 
-  return (
-    <SignUpForm handleSubmit={handleSubmit} handleChange={handleChange} isInvalid={isInvalid} />
-  );
-};
+  render() {
+    console.log('sigin render', this.props);
+
+    const isInvalid =
+      this.state.passwordOne !== this.state.passwordTwo ||
+      this.state.passwordOne === '' ||
+      this.state.email === '' ||
+      this.state.username === '';
+
+    return (
+      <SignUpForm
+        handleSubmit={this.handleSubmit}
+        handleChange={this.handleChange}
+        isInvalid={isInvalid}
+      />
+    );
+  }
+}
 
 const SignUpForm = ({ handleSubmit, handleChange, isInvalid }) => (
   <React.Fragment>
@@ -88,4 +103,6 @@ const SignUpLink = () => (
   </React.Fragment>
 );
 
-export default SignUp;
+const SignUpComponent = withRouter(withFirebase(SignUp));
+
+export default SignUpComponent;

@@ -1,52 +1,73 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { withFirebase } from '../Firebase';
 
 import * as ROUTES from '../../constants/routes';
 
-const Sigin = props => {
-  console.log('signing props', props);
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-    error: null
-  });
+class Sigin extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      user: {
+        email: '',
+        password: '',
+        error: null
+      },
+      isInvalid: undefined
+    };
+  }
 
-  let isInvalid;
-
-  function handleChange(evt) {
-    setState({
-      ...state,
-      [evt.target.name]: evt.target.value
+  handleChange(evt) {
+    this.setState({
+      ...this.state,
+      user: {
+        ...this.state.user,
+        [evt.target.name]: evt.target.value
+      }
     });
   }
 
-  function handleSubmit(evt) {
+  handleSubmit(evt) {
     evt.preventDefault();
 
-    const { email, password } = state;
+    const { email, password } = this.state.user;
+    let { isInvalid } = this.state;
 
     isInvalid = password === '' || email === '';
 
     if (!isInvalid) {
-      props.firebase
+      this.props.firebase
         .doSignInWithEmailAndPassword(email, password)
-        .then(() => {
-          setState({ email: '', password: '', error: null });
-          props.history.push(ROUTES.HOME);
+        .then(data => {
+          console.log('data::::', data);
+          this.setState({
+            user: { email: '', password: '', error: null }
+          });
+          this.props.history.push(ROUTES.HOME);
         })
         .catch(error => {
-          setState({
-            ...state,
+          console.log('error');
+          this.setState({
+            ...this.state,
             error
           });
         });
     }
   }
 
-  return (
-    <SigInForm handleSubmit={handleSubmit} handleChange={handleChange} isInvalid={isInvalid} />
-  );
-};
+  render() {
+    console.log('this.props signin', this.props);
+    return (
+      <SigInForm
+        handleSubmit={this.handleSubmit}
+        handleChange={this.handleChange}
+        isInvalid={this.isInvalid}
+      />
+    );
+  }
+}
 
 const SigInForm = ({ handleSubmit, handleChange, isInvalid }) => (
   <React.Fragment>
@@ -63,4 +84,4 @@ const SigInForm = ({ handleSubmit, handleChange, isInvalid }) => (
   </React.Fragment>
 );
 
-export default Sigin;
+export default withRouter(withFirebase(Sigin));

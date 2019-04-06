@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const {
   REACT_APP_API_KEY,
@@ -23,10 +24,13 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
+    this.db = app.database();
+    // CAUSE JS AND I DON'T KNOW WHY A LOOSE THE REFERENCE TO THIS
+    this.doSignOut = this.doSignOut.bind(this);
   }
 
+  // AUTH API
   doCreateUserWithEmailAndPassword(email, password) {
-    console.log('create user!!');
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
 
@@ -35,7 +39,7 @@ class Firebase {
   }
 
   doSignOut() {
-    return this.auth.signOut();
+    return this.auth.signOut().then(d => console.log('signout', d));
   }
 
   doPasswordReset(email) {
@@ -44,6 +48,17 @@ class Firebase {
 
   doPasswordUpdate(password) {
     return this.auth.currentUser.updatePassword(password);
+  }
+
+  // USER API
+
+  user(uid) {
+    return this.db.ref(`users/${uid}`);
+  }
+
+  users() {
+    console.log('users!!!');
+    return this.db.ref('users');
   }
 }
 
